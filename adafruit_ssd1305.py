@@ -25,8 +25,8 @@
 
 Framebuf (non-displayio) driver for SSD1305 displays
 
+* Author(s): Bryan Siepert, Tony DiCola, Michael McWethy
 
-* Author(s): Tony DiCola, Michael McWethy, Bryan Siepert
 Display init commands taken from
     https://www.buydisplay.com/download/democode/ER-OLED022-1_I2C_DemoCode.txt
 
@@ -95,6 +95,7 @@ class _SSD1305(framebuf.FrameBuffer):
         if self.reset_pin:
             self.reset_pin.switch_to_output(value=0)
         self.pages = self.height // 8
+        self._column_offset = 4 # hardcoded for now...
         # Note the subclass must initialize self.framebuf to a framebuffer.
         # This is necessary because the underlying data buffer is different
         # between I2C and SPI implementations (I2C needs an extra byte).
@@ -167,8 +168,8 @@ class _SSD1305(framebuf.FrameBuffer):
             xpos0 += 32
             xpos1 += 32
         self.write_cmd(SET_COL_ADDR)
-        self.write_cmd(xpos0+4)
-        self.write_cmd(xpos1+4)
+        self.write_cmd(xpos0+self._column_offset)
+        self.write_cmd(xpos1+self._column_offset)
         self.write_cmd(SET_PAGE_ADDR)
         self.write_cmd(0)
         self.write_cmd(self.pages - 1)
