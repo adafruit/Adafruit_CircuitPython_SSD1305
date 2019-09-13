@@ -12,7 +12,7 @@ cache:
   pip: true
 
 env:
-  - DEPLOY_PYPI="false"
+  - DEPLOY_PYPI="true"
 
 deploy:
   - provider: releases
