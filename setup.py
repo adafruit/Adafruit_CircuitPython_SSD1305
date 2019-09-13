@@ -36,7 +36,7 @@ setup(
     install_requires=[
         'Adafruit-Blinka',
         'adafruit-circuitpython-busdevice',
-        'adafruit_framebuf'
+        'adafruit-circuitpython-framebuf'
     ],
 
     # Choose your license

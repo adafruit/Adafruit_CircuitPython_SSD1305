@@ -113,6 +113,8 @@ class _SSD1305(framebuf.FrameBuffer):
                 0xd3, 0x00, #SET_DISP_OFFSET
                 0xad, 0x8e, #Set Master Configuration
                 0xd8, 0x05, #Set Area Color Mode On/Off & Low Power Display Mode
+                0x20, 0x00, # horizontal SET_MEM_ADDR ADD
+                0x40 | 0x00, #SET_DISP_START_LINE ADD
                 0xa1,  #set segment re-map 128 to 0
                 0xC8, #Set COM Output Scan Direction 64 to 1
                 0xda, 0x12, #SET_COM_PIN_CFG
@@ -122,6 +124,7 @@ class _SSD1305(framebuf.FrameBuffer):
                 0xdb, 0x34, #SET_VCOM_DESEL 0xdb, 0x30, $ 0.83* Vcc
                 0xa6, # not inverted SET_NORM_INV
                 0xa4, # output follows RAM contents  SET_ENTIRE_ON
+                0x8d, 0x10 if self.external_vcc else 0x14, #SET_CHARGE_PUMP
                 0xaf): #//--turn on oled panel
             self.write_cmd(cmd)
         self.fill(0)
