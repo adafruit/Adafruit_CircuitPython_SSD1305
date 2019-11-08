@@ -25,7 +25,7 @@
 
 Framebuf (non-displayio) driver for SSD1305 displays
 
-* Author(s): Bryan Siepert, Tony DiCola, Michael McWethy
+* Author(s): Melissa LeBlanc-Williamns, Bryan Siepert, Tony DiCola, Michael McWethy
 
 Display init commands taken from
     https://www.buydisplay.com/download/democode/ER-OLED022-1_I2C_DemoCode.txt
@@ -70,12 +70,16 @@ SET_MEM_ADDR        = const(0x20)
 SET_COL_ADDR        = const(0x21)
 SET_PAGE_ADDR       = const(0x22)
 SET_DISP_START_LINE = const(0x40)
+SET_LUT             = const(0x91)
 SET_SEG_REMAP       = const(0xa0)
 SET_MUX_RATIO       = const(0xa8)
+SET_MASTER_CONFIG   = const(0xad)
 SET_COM_OUT_DIR     = const(0xc0)
+SET_COMSCAN_DEC     = const(0xc8)
 SET_DISP_OFFSET     = const(0xd3)
 SET_COM_PIN_CFG     = const(0xda)
 SET_DISP_CLK_DIV    = const(0xd5)
+SET_AREA_COLOR      = const(0xd8)
 SET_PRECHARGE       = const(0xd9)
 SET_VCOM_DESEL      = const(0xdb)
 SET_CHARGE_PUMP     = const(0x8d)
@@ -95,7 +99,9 @@ class _SSD1305(framebuf.FrameBuffer):
         if self.reset_pin:
             self.reset_pin.switch_to_output(value=0)
         self.pages = self.height // 8
-        self._column_offset = 4 # hardcoded for now...
+        self._column_offset = 0
+        if self.height == 32:
+            self._column_offset = 4 # hardcoded for now...
         # Note the subclass must initialize self.framebuf to a framebuffer.
         # This is necessary because the underlying data buffer is different
         # between I2C and SPI implementations (I2C needs an extra byte).
@@ -105,27 +111,26 @@ class _SSD1305(framebuf.FrameBuffer):
     def init_display(self):
         """Base class to initialize display"""
         for cmd in (
-                0xae | 0x00, # off
+                SET_DISP | 0x00, # off
                 # timing and driving scheme
-                0xd5, 0x80, #SET_DISP_CLK_DIV
-                0xa0 | 0x01, # column addr 127 mapped to SEG0 SET_SEG_REMAP
-                0xa8, self.height - 1, #SET_MUX_RATIO
-                0xd3, 0x00, #SET_DISP_OFFSET
-                0xad, 0x8e, #Set Master Configuration
-                0xd8, 0x05, #Set Area Color Mode On/Off & Low Power Display Mode
-                0x20, 0x00, # horizontal SET_MEM_ADDR ADD
-                0x40 | 0x00, #SET_DISP_START_LINE ADD
-                0xa1,  #set segment re-map 128 to 0
-                0xC8, #Set COM Output Scan Direction 64 to 1
-                0xda, 0x12, #SET_COM_PIN_CFG
-                0x91, 0x3f, 0x3f, 0x3f, 0x3f,#Current drive pulse width of BANK0, Color A, Band C.
-                0x81, 0xff, # maximum SET_CONTRAST to maximum
-                0xd9, 0xd2, #SET_PRECHARGE orig: 0xd9, 0x22 if self.external_vcc else 0xf1,
-                0xdb, 0x34, #SET_VCOM_DESEL 0xdb, 0x30, $ 0.83* Vcc
-                0xa6, # not inverted SET_NORM_INV
-                0xa4, # output follows RAM contents  SET_ENTIRE_ON
-                0x8d, 0x10 if self.external_vcc else 0x14, #SET_CHARGE_PUMP
-                0xaf): #//--turn on oled panel
+                SET_DISP_CLK_DIV, 0x80, #SET_DISP_CLK_DIV
+                SET_SEG_REMAP | 0x01, # column addr 127 mapped to SEG0 SET_SEG_REMAP
+                SET_MUX_RATIO, self.height - 1, #SET_MUX_RATIO
+                SET_DISP_OFFSET, 0x00, #SET_DISP_OFFSET
+                SET_MASTER_CONFIG, 0x8e, #Set Master Configuration
+                SET_AREA_COLOR, 0x05, #Set Area Color Mode On/Off & Low Power Display Mode
+                SET_MEM_ADDR, 0x00, # horizontal SET_MEM_ADDR ADD
+                SET_DISP_START_LINE | 0x00, 0x2E, #SET_DISP_START_LINE ADD
+                SET_COMSCAN_DEC, #Set COM Output Scan Direction 64 to 1
+                SET_COM_PIN_CFG, 0x12, #SET_COM_PIN_CFG
+                SET_LUT, 0x3f, 0x3f, 0x3f, 0x3f,#Current drive pulse width of BANK0, Color A, B, C
+                SET_CONTRAST, 0xff, # maximum SET_CONTRAST to maximum
+                SET_PRECHARGE, 0xd2, #SET_PRECHARGE orig: 0xd9, 0x22 if self.external_vcc else 0xf1,
+                SET_VCOM_DESEL, 0x34, #SET_VCOM_DESEL 0xdb, 0x30, $ 0.83* Vcc
+                SET_NORM_INV, # not inverted SET_NORM_INV
+                SET_ENTIRE_ON, # output follows RAM contents  SET_ENTIRE_ON
+                SET_CHARGE_PUMP, 0x10 if self.external_vcc else 0x14, #SET_CHARGE_PUMP
+                SET_DISP | 0x01): #//--turn on oled panel
             self.write_cmd(cmd)
         self.fill(0)
         self.show()
@@ -171,8 +176,8 @@ class _SSD1305(framebuf.FrameBuffer):
             xpos0 += 32
             xpos1 += 32
         self.write_cmd(SET_COL_ADDR)
-        self.write_cmd(xpos0+self._column_offset)
-        self.write_cmd(xpos1+self._column_offset)
+        self.write_cmd(xpos0 + self._column_offset)
+        self.write_cmd(xpos1 + self._column_offset)
         self.write_cmd(SET_PAGE_ADDR)
         self.write_cmd(0)
         self.write_cmd(self.pages - 1)
