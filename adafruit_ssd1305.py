@@ -109,7 +109,7 @@ class _SSD1305(framebuf.FrameBuffer):
                 # timing and driving scheme
                 0xd5, 0x80, #SET_DISP_CLK_DIV
                 0xa0 | 0x01, # column addr 127 mapped to SEG0 SET_SEG_REMAP
-                0xa8, 0x1f,#SET_MUX_RATIO
+                0xa8, self.height - 1, #SET_MUX_RATIO
                 0xd3, 0x00, #SET_DISP_OFFSET
                 0xad, 0x8e, #Set Master Configuration
                 0xd8, 0x05, #Set Area Color Mode On/Off & Low Power Display Mode
