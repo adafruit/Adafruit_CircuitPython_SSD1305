@@ -9,8 +9,8 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_SSD1305.svg?branch=master
-    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_SSD1305
+.. image:: https://github.com/adafruit/Adafruit_CircuitPython_SSD1305/workflows/Build%20CI/badge.svg
+    :target: https://github.com/adafruit/Adafruit_CircuitPython_SSD1305/actions/
     :alt: Build Status
 
 Framebuf (non-displayio) driver for SSD1305 displays
