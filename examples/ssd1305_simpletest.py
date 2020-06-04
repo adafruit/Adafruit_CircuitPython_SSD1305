@@ -14,7 +14,7 @@ i2c = busio.I2C(SCL, SDA)
 display = adafruit_ssd1305.SSD1305_I2C(128, 32, i2c)
 
 # Alternatively you can change the I2C address of the device with an addr parameter:
-#display = adafruit_ssd1305.SSD1305_I2C(128, 32, i2c, addr=0x31)
+# display = adafruit_ssd1305.SSD1305_I2C(128, 32, i2c, addr=0x31)
 
 # Clear the display.  Always call show after changing pixels to make the display
 # update visible!
