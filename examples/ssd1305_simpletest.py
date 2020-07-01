@@ -1,9 +1,13 @@
 # Import all board pins.
-from board import SCL, SDA
+from board import SCL, SDA, D4
 import busio
+import digitalio
 
 # Import the SSD1305 module.
 import adafruit_ssd1305
+
+# Define the Reset Pin
+oled_reset = digitalio.DigitalInOut(D4)
 
 # Create the I2C interface.
 i2c = busio.I2C(SCL, SDA)
@@ -11,10 +15,10 @@ i2c = busio.I2C(SCL, SDA)
 # Create the SSD1305 OLED class.
 # The first two parameters are the pixel width and pixel height.  Change these
 # to the right size for your display!
-display = adafruit_ssd1305.SSD1305_I2C(128, 32, i2c)
+display = adafruit_ssd1305.SSD1305_I2C(128, 32, i2c, addr=0x3C, reset=oled_reset)
 
 # Alternatively you can change the I2C address of the device with an addr parameter:
-# display = adafruit_ssd1305.SSD1305_I2C(128, 32, i2c, addr=0x31)
+# display = adafruit_ssd1305.SSD1305_I2C(128, 32, i2c, addr=0x31, reset=oled_reset)
 
 # Clear the display.  Always call show after changing pixels to make the display
 # update visible!
