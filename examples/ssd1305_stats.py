@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-License-Identifier: MIT
+
 # Copyright (c) 2020 Adafruit Industries
 # Author: Tony DiCola, James DeVito, Melissa LeBlanc-Williams
 #
