@@ -1,5 +1,5 @@
-# SPDX-FileCopyrightText: 2020 Tony DiCola, James DeVito, for Adafruit Industries
-# SPDX-FileCopyrightText: 2020 Melissa LeBlanc-Williams, for Adafruit Industries
+# SPDX-FileCopyrightText: <text> 2020 Tony DiCola, James DeVito,
+# and 2020 Melissa LeBlanc-Williams, for Adafruit Industries </text>
 
 # SPDX-License-Identifier: MIT
 
