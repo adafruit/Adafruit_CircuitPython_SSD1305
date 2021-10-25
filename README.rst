@@ -86,6 +86,11 @@ Usage Example
 
     display.show()
 
+Documentation
+=============
+
+API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/ssd1305/en/latest/>`_.
+
 Contributing
 ============
 
