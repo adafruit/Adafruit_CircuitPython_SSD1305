@@ -42,6 +42,7 @@ except ImportError:
     import adafruit_framebuf as framebuf
 
 try:
+    # Used only for typing
     from typing import Optional
     from digitalio import DigitalInOut
     from busio import I2C, SPI
