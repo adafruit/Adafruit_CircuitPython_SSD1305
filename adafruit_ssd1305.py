@@ -42,9 +42,9 @@ except ImportError:
     import adafruit_framebuf as framebuf
 
 try:
+    from typing import Optional
     from digitalio import DigitalInOut
     from busio import I2C, SPI
-    from typing import Optional
 except ImportError:
     pass
 
