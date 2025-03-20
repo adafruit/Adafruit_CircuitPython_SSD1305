@@ -87,7 +87,8 @@ class _SSD1305(framebuf.FrameBuffer):
         height: int,
         *,
         external_vcc: bool,
-        reset: Optional[DigitalInOut]
+        reset: Optional[DigitalInOut],
+        col: Optional[int] = None  # Shortened argument name
     ):
         super().__init__(buffer, width, height)
         self.width = width
@@ -98,9 +99,10 @@ class _SSD1305(framebuf.FrameBuffer):
         if self.reset_pin:
             self.reset_pin.switch_to_output(value=False)
         self.pages = self.height // 8
-        self._column_offset = 0
-        if self.height == 32:
-            self._column_offset = 4  # hardcoded for now...
+
+        # Set default column offset, allow override
+        self._column_offset = col if col is not None else 4
+
         # Note the subclass must initialize self.framebuf to a framebuffer.
         # This is necessary because the underlying data buffer is different
         # between I2C and SPI implementations (I2C needs an extra byte).
@@ -220,7 +222,8 @@ class SSD1305_I2C(_SSD1305):
         *,
         addr: int = 0x3C,
         external_vcc: bool = False,
-        reset: Optional[DigitalInOut] = None
+        reset: Optional[DigitalInOut] = None,
+        col = None
     ):
         self.i2c_device = i2c_device.I2CDevice(i2c, addr)
         self.addr = addr
