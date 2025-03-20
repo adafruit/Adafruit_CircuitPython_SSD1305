@@ -223,7 +223,7 @@ class SSD1305_I2C(_SSD1305):
         addr: int = 0x3C,
         external_vcc: bool = False,
         reset: Optional[DigitalInOut] = None,
-        col = None
+        col=None
     ):
         self.i2c_device = i2c_device.I2CDevice(i2c, addr)
         self.addr = addr
