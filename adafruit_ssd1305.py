@@ -241,7 +241,7 @@ class SSD1305_I2C(_SSD1305):
             height,
             external_vcc=external_vcc,
             reset=reset,
-            col=col, # <-- Forwarded col parameter to base class
+            col=col,  # <-- Forwarded col parameter to base class
         )
 
     def write_cmd(self, cmd: int) -> None:
