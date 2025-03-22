@@ -241,6 +241,7 @@ class SSD1305_I2C(_SSD1305):
             height,
             external_vcc=external_vcc,
             reset=reset,
+            col=col  # <-- Forwarded col parameter to base class
         )
 
     def write_cmd(self, cmd: int) -> None:
@@ -284,7 +285,8 @@ class SSD1305_SPI(_SSD1305):
         external_vcc: bool = False,
         baudrate: int = 8000000,
         polarity: int = 0,
-        phase: int = 0
+        phase: int = 0,
+        col=None
     ):
         self.rate = 10 * 1024 * 1024
         dc.switch_to_output(value=False)
@@ -299,6 +301,7 @@ class SSD1305_SPI(_SSD1305):
             height,
             external_vcc=external_vcc,
             reset=reset,
+            col=col
         )
 
     def write_cmd(self, cmd: int) -> None:
