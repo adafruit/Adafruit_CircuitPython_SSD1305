@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: MIT
 
 # Import all board pins.
-from board import SCL, SDA, D4
 import busio
 import digitalio
+from board import D4, SCL, SDA
 
 # Import the SSD1305 module.
 import adafruit_ssd1305

@@ -33,8 +33,8 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_SSD1305.git"
 
 import time
 
-from micropython import const
 from adafruit_bus_device import i2c_device, spi_device
+from micropython import const
 
 try:
     import framebuf
@@ -44,8 +44,9 @@ except ImportError:
 try:
     # Used only for typing
     from typing import Optional
-    from digitalio import DigitalInOut
+
     from busio import I2C, SPI
+    from digitalio import DigitalInOut
 except ImportError:
     pass
 
@@ -79,7 +80,6 @@ SET_CHARGE_PUMP = const(0x8D)
 class _SSD1305(framebuf.FrameBuffer):
     """Base class for SSD1305 display driver"""
 
-    # pylint: disable-msg=too-many-arguments
     def __init__(
         self,
         buffer: memoryview,
@@ -88,7 +88,7 @@ class _SSD1305(framebuf.FrameBuffer):
         *,
         external_vcc: bool,
         reset: Optional[DigitalInOut],
-        col: Optional[int] = None  # Shortened argument name
+        col: Optional[int] = None,  # Shortened argument name
     ):
         super().__init__(buffer, width, height)
         self.width = width
@@ -223,7 +223,7 @@ class SSD1305_I2C(_SSD1305):
         addr: int = 0x3C,
         external_vcc: bool = False,
         reset: Optional[DigitalInOut] = None,
-        col=None
+        col=None,
     ):
         self.i2c_device = i2c_device.I2CDevice(i2c, addr)
         self.addr = addr
@@ -258,7 +258,6 @@ class SSD1305_I2C(_SSD1305):
             self.i2c_device.write(self.buffer)
 
 
-# pylint: disable-msg=too-many-arguments
 class SSD1305_SPI(_SSD1305):
     """
     SPI class for SSD1305
@@ -271,7 +270,6 @@ class SSD1305_SPI(_SSD1305):
     :param cs: the chip-select pin to use (sometimes labeled "SS").
     """
 
-    # pylint: disable=no-member
     # Disable should be reconsidered when refactor can be tested.
     def __init__(
         self,
@@ -286,7 +284,7 @@ class SSD1305_SPI(_SSD1305):
         baudrate: int = 8000000,
         polarity: int = 0,
         phase: int = 0,
-        col=None
+        col=None,
     ):
         self.rate = 10 * 1024 * 1024
         dc.switch_to_output(value=False)
