@@ -8,12 +8,14 @@
 # Adafruit Blinka to support CircuitPython libraries. CircuitPython does
 # not support PIL/pillow (python imaging library)!
 
-import time
 import subprocess
-from board import SCL, SDA, D4
+import time
+
 import busio
 import digitalio
+from board import D4, SCL, SDA
 from PIL import Image, ImageDraw, ImageFont
+
 import adafruit_ssd1305
 
 # Define the Reset Pin
