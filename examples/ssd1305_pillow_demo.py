@@ -24,17 +24,18 @@ oled_reset = digitalio.DigitalInOut(board.D4)
 WIDTH = 128
 HEIGHT = 64  # Change to 32 if needed
 BORDER = 8
+COL = 0  # If you see static, change 0 --> 4, fixes alignment
 
 # Use for SPI
 spi = board.SPI()
 oled_cs = digitalio.DigitalInOut(board.D5)
 oled_dc = digitalio.DigitalInOut(board.D6)
-oled = adafruit_ssd1305.SSD1305_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs)
+oled = adafruit_ssd1305.SSD1305_SPI(WIDTH, HEIGHT, spi, oled_dc, oled_reset, oled_cs, col=COL)
 
 # Use for I2C.
 # i2c = board.I2C()  # uses board.SCL and board.SDA
 # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
-# oled = adafruit_ssd1305.SSD1305_I2C(WIDTH, HEIGHT, i2c, addr=0x3c, reset=oled_reset)
+# oled = adafruit_ssd1305.SSD1305_I2C(WIDTH, HEIGHT, i2c, addr=0x3c, reset=oled_reset, col=COL)
 
 # Clear display.
 oled.fill(0)
@@ -62,7 +63,9 @@ font = ImageFont.load_default()
 
 # Draw Some Text
 text = "Hello World!"
-(font_width, font_height) = font.getsize(text)
+bbox = font.getbbox(text)
+font_width = bbox[2] - bbox[0]
+font_height = bbox[3] - bbox[1]
 draw.text(
     (oled.width // 2 - font_width // 2, oled.height // 2 - font_height // 2),
     text,
