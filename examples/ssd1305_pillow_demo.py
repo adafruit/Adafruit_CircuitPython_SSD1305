@@ -24,7 +24,7 @@ oled_reset = digitalio.DigitalInOut(board.D4)
 WIDTH = 128
 HEIGHT = 64  # Change to 32 if needed
 BORDER = 8
-COL = 0      # try 4, if you see static, fixes alignment
+COL = 0  # If you see static, change 0 --> 4, fixes alignment
 
 # Use for SPI
 spi = board.SPI()
